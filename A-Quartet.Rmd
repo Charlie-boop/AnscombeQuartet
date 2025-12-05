@@ -1,0 +1,121 @@
+---
+title: "Anscombe Quartet Exercise"
+author: "Carlos Espinoza"
+date: "2025-11-09"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Data and Libraries
+```{r}
+AQ <- readxl::read_xlsx("D:/Documents/US Docs/Fall 2025/BZAN 6351/Case Studies/To Plot... SpreadSheet.xlsx", sheet = "AQ Data File")
+View(AQ)
+library(car)
+```
+
+#Question 1
+```{r}
+#X columns
+#Standard Deviations
+sd(AQ$x1)
+sd(AQ$x2)
+sd(AQ$x3)
+sd(AQ$x4)
+#Means
+mean(AQ$x1)
+mean(AQ$x2)
+mean(AQ$x3)
+mean(AQ$x4)
+
+#Y columns
+#Standard Deviations
+sd(AQ$y1)
+sd(AQ$y2)
+sd(AQ$y3)
+sd(AQ$y4)
+#Means
+mean(AQ$y1)
+mean(AQ$y2)
+mean(AQ$y3)
+mean(AQ$y4)
+
+
+#I observe that the first three columns of x are duplicates with the exception of the last one- yet their Standard Deviation and Mean are the same for all of them.
+#Y columns are all different, yet their means and standard deviations are really close to one another, sometimes identical.
+
+```
+
+#Question 2
+```{r}
+cor(AQ$x1, AQ$y1)
+cor(AQ$x2, AQ$y2)
+cor(AQ$x3, AQ$y3)
+cor(AQ$x4, AQ$y4)
+
+#I observe all of the correlation values for x/y pairs are all very close. They all show a positive linear relationship, which means that as X increases, so does Y. 
+```
+
+#Question 3
+```{r}
+regression1 <- lm(y1~ x1, data = AQ)
+summary(regression1)
+
+regression2 <- lm(y2~ x2, data = AQ)
+summary(regression2)
+
+regression3 <- lm(y3~ x3, data = AQ)
+summary(regression3)
+
+regression4 <- lm(y4~ x4, data = AQ)
+summary(regression4)
+
+#I observe that the coefficients, p-values, as well as the r-squared values all sit very close to each other. The positive relationships between x and y pairs is confirmed. At around 67% for r-squared, the data is a good fit in every case. The p-values and f-statistics for every regression are within range, showing the relationships are statistically significant. The sets are very consistent in general. 
+```
+
+#Question 4
+```{r}
+#The relationships seem very similar, but they can't possibly be identical as no two pairs are exactly the same despite the repetition. 
+#I could validate my conclusion by performing further tests, such as ANOVA
+combined_data <- data.frame(
+  y = c(AQ$y1, AQ$y2, AQ$y3, AQ$y4),
+  x = c(AQ$x1, AQ$x2, AQ$x3, AQ$x4),
+  group = factor(rep(1:4, each = nrow(AQ)))
+)  #checking the p-values for interaction terms, see if the slopes are significantly different across groups.
+
+model_full <- lm(y ~ x * group, data = combined_data)
+summary(model_full)
+
+model_reduced <- lm(y ~ x + group, data = combined_data)
+anova(model_reduced, model_full)
+#combining models to run an ANOVA test
+
+
+combined_data <- data.frame(
+  y = c(AQ$y1, AQ$y2, AQ$y3, AQ$y4),
+  group = factor(rep(1:4, each = nrow(AQ)))
+)
+
+leveneTest(y ~ group, data = combined_data)
+#Performing Levene Test to check on variability
+
+#These tests actually support the notion that the relationships are identical, as p-values would suggest.
+```
+
+
+#Question 5
+```{r}
+plot(AQ$x1, AQ$y1, main = "Plot 1", xlab = "X", ylab = "Y")
+
+plot(AQ$x2, AQ$y2, main = "Plot 2", xlab = "X", ylab = "Y" )
+
+plot(AQ$x3, AQ$y3, main = "Plot 3", xlab = "X", ylab = "Y")
+
+plot(AQ$x4, AQ$y4, main = "Plot 4", xlab = "X", ylab = "Y")
+
+#Though the results do not visually match my expectations, I don't think there is an actual contradiction going on. The previous tests examined the relationships between these variables, and are not directly representing the raw data points that are being displayed on the scatter plots. 
+
+```
+
