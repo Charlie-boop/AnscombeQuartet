@@ -8,7 +8,8 @@ Demonstrate the applications of plotting the graphs
 Understand mean, standard deviation, and regression coefficients
 Demonstrate the concept of the Anscombe quartet
 
-For this simple exercise I used the library "car" and the Excel spreadsheet containing the sample data.
+For this simple exercise I used the library "car" and the Excel spreadsheet from Harvard Business Impact's Coursepack:"To Plot or Not to Plot: An Exercise on Understanding and Comparing Datasets" containing the sample data.
+
 I carried multiple operations for summary statistics: standard deviation, mean and correlation. Additionally I carried out simple linear regression, ran Analysis of Variance tests and the levene test on the data. 
 Finally I used scatterplots to visualize the data.
 
